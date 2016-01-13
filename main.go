@@ -9,7 +9,7 @@ import (
 	"regexp"
 )
 
-var ticketRegexp = regexp.MustCompile(`^(TC-\d+):?.*`)
+var ticketRegexp = regexp.MustCompile(`^\s*(TC-\d+):?.*`)
 var errInvalidLine = errors.New("invalid line")
 
 func main() {
