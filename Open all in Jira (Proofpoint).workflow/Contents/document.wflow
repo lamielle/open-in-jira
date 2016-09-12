@@ -59,7 +59,7 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>COMMAND_STRING</key>
-					<string>~/bin/open-in-jira</string>
+					<string>~/bin/open-in-jira -url https://jira.proofpoint.com/jira/secure/QuickSearch.jspa?searchString=</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>

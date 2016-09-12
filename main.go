@@ -3,16 +3,26 @@ package main
 import (
 	"bufio"
 	"errors"
+	"flag"
 	"fmt"
 	"os"
 	"os/exec"
 	"regexp"
 )
 
-var ticketRegexp = regexp.MustCompile(`^\s*(T[CD]-\d+):?.*`)
+var url = flag.String("url", "", "Jira search URL")
+var ticketRegexp = regexp.MustCompile(`^\s*([a-zA-Z]+-\d+):?.*`)
 var errInvalidLine = errors.New("invalid line")
 
 func main() {
+	flag.Parse()
+
+	if len(*url) == 0 {
+		fmt.Fprintln(os.Stderr, "Search URL must be provided")
+		flag.Usage()
+		os.Exit(1)
+	}
+
 	scanner := bufio.NewScanner(os.Stdin)
 
 	count := 0
@@ -20,7 +30,7 @@ func main() {
 		ticket, err := parseTicket(scanner.Text())
 		if err == nil {
 			fmt.Printf("Opening ticket %s...\n", ticket)
-			if err = openTicket(ticket); err != nil {
+			if err = openTicket(*url, ticket); err != nil {
 				fmt.Fprintln(os.Stderr, "Failed to open ticket:", err)
 			}
 			count += 1
@@ -44,8 +54,8 @@ func parseTicket(line string) (string, error) {
 	return matches[1], nil
 }
 
-func openTicket(ticket string) error {
-	cmd := exec.Command("open", fmt.Sprintf("https://netcitadel.atlassian.net/secure/QuickSearch.jspa?searchString=%s", ticket))
+func openTicket(url, ticket string) error {
+	cmd := exec.Command("open", url+ticket)
 	if err := cmd.Start(); err != nil {
 		return err
 	}
