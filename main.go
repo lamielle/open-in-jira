@@ -11,7 +11,7 @@ import (
 )
 
 var url = flag.String("url", "", "Jira search URL")
-var ticketRegexp = regexp.MustCompile(`^\s*([a-zA-Z]+-\d+):?.*`)
+var ticketRegexp = regexp.MustCompile(`^[\s\*]*([a-zA-Z]+-\d+):?.*`)
 var errInvalidLine = errors.New("invalid line")
 
 func main() {
